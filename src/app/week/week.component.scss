@@ -1,9 +1,17 @@
 .week {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: auto auto;
+  gap: 1rem;
 }
 
-.day {
+.weekdays {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  gap: 1rem;
+}
+
+.weekend {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }

@@ -1,0 +1,18 @@
+<div [formGroup]="formGroup" class="day">
+  <h3>{{ dayName }}</h3>
+  <label [for]="inputId('start')">Start:</label>
+  <input type="time" formControlName="start" [id]="inputId('start')">
+
+  <label [for]="inputId('lunchOut')">Lunch ut:</label>
+  <input type="time" formControlName="lunchOut" [id]="inputId('lunchOut')">
+
+  <label [for]="inputId('lunchIn')">Lunch in:</label>
+  <input type="time" formControlName="lunchIn" [id]="inputId('lunchIn')">
+
+  <label [for]="inputId('end')">Slut:</label>
+  <input type="time" formControlName="end" [id]="inputId('end')">
+</div>
+
+<div class="working-hours">
+  <strong>Arbetad tid: </strong> {{ getWorkingHours() }}
+</div>

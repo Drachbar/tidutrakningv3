@@ -1,16 +1,30 @@
-import {Component, Input} from '@angular/core';
+import {Component, effect, Input, signal} from '@angular/core';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {DayComponent} from '../day/day.component';
 
 @Component({
   selector: 'app-week',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DayComponent
   ],
   templateUrl: './week.component.html',
   styleUrl: './week.component.scss'
 })
 export class WeekComponent {
   @Input({required: true}) week!: FormGroup;
+  showWeekends = signal(false); // Skapa en signal istället för en vanlig variabel
+  weekNo = signal<number | null>(null);
+
+  constructor() {
+    effect(() => {
+      this.weekNo.set(this.week.get('weekNo')?.value || null);
+    });
+  }
+
+  toggleWeekends() {
+    this.showWeekends.update(value => !value); // Uppdatera signalen
+  }
 
   get days(): { name: string; group: FormGroup }[] {
     return [

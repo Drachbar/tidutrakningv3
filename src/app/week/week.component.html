@@ -1,20 +1,29 @@
-@let weekNo = week.get('weekNo')?.value;
+@let formattedWeekNo = (weekNo() ?? 0).toString();
 
 <div [formGroup]="week">
-  <legend>Vecka {{weekNo}}</legend>
+  <legend>Vecka {{ formattedWeekNo }}</legend>
+  <button class="btn btn-primary mb-3" (click)="toggleWeekends()">
+    {{ showWeekends() ? 'Dölj helger' : 'Visa helger' }}
+  </button>
   <div class="week">
-    @for (day of days; track $index) {
-      <div [formGroup]="day.group" class="day">
-        <h3>{{ day.name }}</h3>
-        <label [for]="weekNo + '-' + day.name + '-start'">Start: </label>
-        <input type="time" formControlName="start" [id]="weekNo + '-' + day.name + '-start'">
-        <label [for]="weekNo + '-' + day.name + '-lunch-out'">Lunch ut: </label>
-        <input type="time" formControlName="lunchOut" [id]="weekNo + '-' + day.name + '-lunch-out'">
-        <label [for]="weekNo + '-' + day.name + '-lunch-in'">Lunch in: </label>
-        <input type="time" formControlName="lunchIn" [id]="weekNo + '-' + day.name + '-lunch-in'">
-        <label [for]="weekNo + '-' + day.name + '-end'">Slut: </label>
-        <input type="time" formControlName="end" [id]="weekNo + '-' + day.name + '-end'">
-      </div>
-    }
+    <div class="weekdays">
+      @for (day of days; track $index) {
+        @if (day.name !== 'Lördag' && day.name !== 'Söndag') {
+          <app-day [formGroup]="day.group"
+                   [weekNo]="formattedWeekNo"
+                   [dayName]="day.name"></app-day>
+        }
+      }
+    </div>
+    <!-- Helg (lördag-söndag) -->
+    <div class="weekend" [class.d-none]="!showWeekends()">
+      @for (day of days; track $index) {
+        @if (day.name === 'Lördag' || day.name === 'Söndag') {
+          <app-day [formGroup]="day.group"
+                   [weekNo]="formattedWeekNo"
+                   [dayName]="day.name"></app-day>
+        }
+      }
+    </div>
   </div>
 </div>
