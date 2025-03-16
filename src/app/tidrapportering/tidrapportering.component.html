@@ -1,6 +1,6 @@
 <input type="number" [(ngModel)]="weekNo">
 <button (click)="addWeek(weekNo())">lägg till vecka med nummer {{ weekNo() }}</button>
 <button (click)="printWeeks()">Logga ut veckor</button>
-@for(week of weeks.controls; track week.get('weekNo')?.value) {
+@for(week of weeks.controls.slice().reverse(); track week.get('weekNo')?.value) {
   <app-week [week]="week"></app-week>
 }
