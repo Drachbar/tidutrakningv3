@@ -12,10 +12,6 @@ import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 export class WeekComponent {
   @Input({required: true}) week!: FormGroup;
 
-  logWeek() {
-    console.log(this.week);
-  }
-
   get days(): { name: string; group: FormGroup }[] {
     return [
       { name: 'Måndag', group: this.week.get('monday') as FormGroup },
@@ -27,16 +23,4 @@ export class WeekComponent {
       { name: 'Söndag', group: this.week.get('sunday') as FormGroup },
     ];
   }
-
-  // get days(): FormGroup[] {
-  //   const days: FormGroup[] = []
-  //   days.push(this.week.get('monday') as FormGroup)
-  //   days.push(this.week.get('tuesday') as FormGroup)
-  //   days.push(this.week.get('wednesday') as FormGroup)
-  //   days.push(this.week.get('thursday') as FormGroup)
-  //   days.push(this.week.get('friday') as FormGroup)
-  //   days.push(this.week.get('saturday') as FormGroup)
-  //   days.push(this.week.get('sunday') as FormGroup)
-  //   return days
-  // }
 }
