@@ -2,6 +2,7 @@
 
 <div [formGroup]="week">
   <legend>Vecka {{ formattedWeekNo }}</legend>
+  <button class="btn btn-primary mb-3" (click)="removeWeek.emit(parseInt(formattedWeekNo))">Ta bort vecka</button>
   <button class="btn btn-primary mb-3" (click)="toggleWeekends()">
     {{ showWeekends() ? 'Dölj helger' : 'Visa helger' }}
   </button>

@@ -81,14 +81,19 @@ export class TidrapporteringComponent implements OnInit {
 
   createDay(day?: any): FormGroup {
     return this.fb.group({
-      start: [day?.start ?? null],
-      lunchOut: [day?.lunchOut ?? null],
-      lunchIn: [day?.lunchIn ?? null],
-      end: [day?.end ?? null],
+      start: [day?.start ? day.start : null],
+      lunchOut: [day?.lunchOut ? day.lunchOut : null],
+      lunchIn: [day?.lunchIn ? day.lunchIn : null],
+      end: [day?.end ? day.end : null],
     });
   }
 
   printWeeks() {
     console.log(this.weeks);
+  }
+
+  removeWeek(weekNo: number) {
+    const index = this.weeks.value.findIndex((val: any) => val.weekNo === weekNo);
+    this.weeks.removeAt(index);
   }
 }

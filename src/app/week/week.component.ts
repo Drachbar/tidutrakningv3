@@ -1,4 +1,4 @@
-import {Component, effect, Input, signal} from '@angular/core';
+import {Component, computed, EventEmitter, Input, OnInit, Output, signal} from '@angular/core';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {DayComponent} from '../day/day.component';
 
@@ -11,15 +11,17 @@ import {DayComponent} from '../day/day.component';
   templateUrl: './week.component.html',
   styleUrl: './week.component.scss'
 })
-export class WeekComponent {
+export class WeekComponent implements OnInit {
   @Input({required: true}) week!: FormGroup;
-  showWeekends = signal(false); // Skapa en signal istället för en vanlig variabel
-  weekNo = signal<number | null>(null);
+  @Output() removeWeek = new EventEmitter<number>();
 
-  constructor() {
-    effect(() => {
-      this.weekNo.set(this.week.get('weekNo')?.value || null);
-    });
+  showWeekends = signal(false); // Skapa en signal istället för en vanlig variabel
+  weekNo = computed(() => this.week.get('weekNo')?.value || null);
+
+  ngOnInit() {
+    if (!this.isEmptyDay(this.week.value.saturday) || !this.isEmptyDay(this.week.value.sunday)) {
+      this.showWeekends.set(true);
+    }
   }
 
   toggleWeekends() {
@@ -37,4 +39,10 @@ export class WeekComponent {
       { name: 'Söndag', group: this.week.get('sunday') as FormGroup },
     ];
   }
+
+  isEmptyDay(day: any) {
+    return Object.values(day).every(value => value === null)
+  }
+
+  protected readonly parseInt = parseInt;
 }
