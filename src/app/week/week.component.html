@@ -1,0 +1,18 @@
+<div>
+  <button (click)="logWeek()">Logga ut vecka {{ week.get('weekNo')?.value }}</button>
+</div>
+
+<div [formGroup]="week">
+  <label>Veckonummer: <input type="text" formControlName="weekNo"></label>
+  <div class="week">
+    @for (day of days; track $index) {
+      <div [formGroup]="day.group" class="day">
+        <h3>{{ day.name }}</h3>
+        <label>Start: <input type="time" formControlName="start"></label>
+        <label>Lunch ut: <input type="time" formControlName="lunchOut"></label>
+        <label>Lunch in: <input type="time" formControlName="lunchIn"></label>
+        <label>Slut: <input type="time" formControlName="end"></label>
+      </div>
+    }
+  </div>
+</div>
