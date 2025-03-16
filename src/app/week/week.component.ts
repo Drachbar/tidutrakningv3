@@ -44,5 +44,20 @@ export class WeekComponent implements OnInit {
     return Object.values(day).every(value => value === null)
   }
 
+  getFormattedDate(dayIndex: number): string {
+
+    return this.getDateForWeekday(this.weekNo(), 2025, dayIndex);
+  }
+
+  getDateForWeekday(weekNo: number, year: number, dayIndex: number): string {
+    const firstDayOfYear = new Date(year, 0, 1);
+    const daysToFirstMonday = (8 - firstDayOfYear.getDay()) % 7;
+    const firstMonday = new Date(year, 0, 1 + daysToFirstMonday);
+    const weekStart = new Date(firstMonday);
+    weekStart.setDate(firstMonday.getDate() + (weekNo - 1) * 7 + dayIndex);
+
+    return weekStart.toISOString().split('T')[0]; // Formatera som YYYY-MM-DD
+  }
+
   protected readonly parseInt = parseInt;
 }
