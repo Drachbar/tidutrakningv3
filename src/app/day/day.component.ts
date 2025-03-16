@@ -1,6 +1,6 @@
 import {Component, Input, OnInit} from '@angular/core';
 import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {map, Observable} from 'rxjs';
+import {map, Observable, startWith} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 
 @Component({
@@ -30,6 +30,7 @@ export class DayComponent implements OnInit {
 
   createWorkingHoursObservable(): Observable<string> {
     return this.formGroup.valueChanges.pipe(
+      startWith(this.formGroup.value),
       map(value => {
         if (!value.start || !value.end || !value.lunchOut || !value.lunchIn) {
           return '0:00'; // Returnera 0 om något värde saknas
