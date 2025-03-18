@@ -45,18 +45,48 @@ export class WeekComponent implements OnInit {
   }
 
   getFormattedDate(dayIndex: number): string {
-
-    return this.getDateForWeekday(this.weekNo(), 2025, dayIndex);
+    return this.getDateForWeekday(this.weekNo(), 2027, dayIndex);
   }
 
   getDateForWeekday(weekNo: number, year: number, dayIndex: number): string {
-    const firstDayOfYear = new Date(year, 0, 1);
-    const daysToFirstMonday = (8 - firstDayOfYear.getDay()) % 7;
-    const firstMonday = new Date(year, 0, 1 + daysToFirstMonday);
-    const weekStart = new Date(firstMonday);
-    weekStart.setDate(firstMonday.getDate() + (weekNo - 1) * 7 + dayIndex);
+    // Hitta första torsdagen i året (ISO 8601 säger att vecka 1 är den vecka som innehåller årets första torsdag)
+    const firstThursday = new Date(year, 0, 4); // 4 januari är alltid en torsdag eller senare
+    const dayOfWeek = firstThursday.getDay(); // Hämtar veckodagen för 4 januari (0 = Söndag, 1 = Måndag, ..., 6 = Lördag)
 
-    return weekStart.toISOString().split('T')[0]; // Formatera som YYYY-MM-DD
+    // Räkna ut första måndagen i året
+    const firstMonday = new Date(firstThursday);
+    firstMonday.setDate(firstThursday.getDate() - ((dayOfWeek + 6) % 7)); // Backa till måndagen
+
+    // Justera dayIndex så att 0 = måndag, 1 = tisdag, ..., 4 = fredag
+    const adjustedDayIndex = dayIndex + 1;
+
+    // Beräkna första dagen i den önskade veckan
+    const weekStart = new Date(firstMonday);
+    weekStart.setDate(firstMonday.getDate() + (weekNo - 1) * 7 + adjustedDayIndex);
+
+    return weekStart.toISOString().split('T')[0];
+  }
+
+
+  xgetDateForWeekday(weekNo: number, year: number, dayIndex: number): string {
+    console.log('weekNo:' + weekNo)
+    console.log('year:' + year)
+    console.log('dayIndex:' + dayIndex)
+
+    // Hitta den första torsdagen i året (ISO 8601 säger att vecka 1 är den vecka som innehåller årets första torsdag)
+    const firstThursday = new Date(year, 0, 4); // 4 januari är alltid en torsdag eller senare
+    const firstMonday = new Date(firstThursday);
+    firstMonday.setDate(firstThursday.getDate() - (firstThursday.getDay() - 1)); // Backa till måndagen
+
+    // Beräkna första dagen i den önskade veckan
+    const weekStart = new Date(firstMonday);
+    weekStart.setDate(firstMonday.getDate() + (weekNo - 1) * 7 + dayIndex - 1);
+
+    const date = weekStart.toISOString().split('T')[0];
+
+    console.log(date)
+
+    return date;
   }
 
   protected readonly parseInt = parseInt;

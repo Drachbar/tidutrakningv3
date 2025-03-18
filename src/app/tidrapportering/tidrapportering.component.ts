@@ -12,6 +12,7 @@ import {
 import {FormArray, FormBuilder, FormGroup, FormsModule} from '@angular/forms';
 import {WeekComponent} from '../week/week.component';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import {CalendarCalculatorService} from '../service/calendar-calculator.service';
 
 @Component({
   selector: 'app-tidrapportering',
@@ -25,8 +26,9 @@ import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 export class TidrapporteringComponent implements OnInit, AfterViewInit {
   @ViewChild('loadMoreTrigger', { static: false }) loadMoreTrigger!: ElementRef;
   fb = inject(FormBuilder);
+  calendarCalcService = inject(CalendarCalculatorService);
   destroyRef = inject(DestroyRef);
-  weekNo = model<number>(1);
+  weekNo = model<number>(this.calendarCalcService.getCurrentWeek());
   timeForm: FormGroup = this.fb.group({
     weeks: this.fb.array([]),
   });
@@ -133,5 +135,10 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
     const index = this.weeks.value.findIndex((val: any) => val.weekNo === weekNo);
     this.weeks.removeAt(index);
     this.weeksSignal.set([...this.weeks.controls]);
+  }
+
+  getCurrentWeek(): number {
+    console.log(this.calendarCalcService.getCurrentWeek())
+    return this.calendarCalcService.getCurrentWeek();
   }
 }
