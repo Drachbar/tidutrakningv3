@@ -21,11 +21,14 @@
     </div>
     <!-- Helg (lördag-söndag) -->
     <div class="weekend" [class.d-none]="!showWeekends()">
-      @for (day of days; track $index) {
+      @for (day of days; track i; let i = $index) {
         @if (day.name === 'Lördag' || day.name === 'Söndag') {
-          <app-day [formGroup]="day.group"
-                   [weekNo]="formattedWeekNo"
-                   [dayName]="day.name"></app-day>
+          <div>
+            <h3>{{ getFormattedDate(i) }}</h3>
+            <app-day [formGroup]="day.group"
+                     [weekNo]="formattedWeekNo"
+                     [dayName]="day.name"></app-day>
+          </div>
         }
       }
     </div>
