@@ -24,14 +24,22 @@ import {CalendarCalculatorService} from '../service/calendar-calculator.service'
   styleUrl: './tidrapportering.component.scss'
 })
 export class TidrapporteringComponent implements OnInit, AfterViewInit {
-  @ViewChild('loadMoreTrigger', { static: false }) loadMoreTrigger!: ElementRef;
+  @ViewChild('loadMoreTrigger', {static: false}) loadMoreTrigger!: ElementRef;
   fb = inject(FormBuilder);
   calendarCalcService = inject(CalendarCalculatorService);
   destroyRef = inject(DestroyRef);
   weekNo = model<number>(this.calendarCalcService.getCurrentWeek());
+  year = model<number>(this.calendarCalcService.getCurrentYear());
   timeForm: FormGroup = this.fb.group({
     weeks: this.fb.array([]),
   });
+
+  weekStartDate = computed(() =>
+    this.calendarCalcService.getDateByYearWeekDayIndex(this.year(), this.weekNo(), 1).toISOString().split('T')[0]
+  )
+  weekEndDate = computed(() =>
+    this.calendarCalcService.getDateByYearWeekDayIndex(this.year(), this.weekNo(), 7).toISOString().split('T')[0]
+  )
 
   displayedWeeks = signal(3);
 
@@ -65,7 +73,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
       if (entries[0].isIntersecting) {
         this.loadMoreWeeks();
       }
-    }, { rootMargin: '400px' });
+    }, {rootMargin: '400px'});
 
     observer.observe(this.loadMoreTrigger.nativeElement);
   }
@@ -81,14 +89,15 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
 
     storedWeeks.forEach(week => {
       const weekForm = this.fb.group({
+        year: [week.year],
         weekNo: [week.weekNo],
-        monday: this.createDay(week.monday),
-        tuesday: this.createDay(week.tuesday),
-        wednesday: this.createDay(week.wednesday),
-        thursday: this.createDay(week.thursday),
-        friday: this.createDay(week.friday),
-        saturday: this.createDay(week.saturday),
-        sunday: this.createDay(week.sunday),
+        monday: this.restoreDay(week.monday),
+        tuesday: this.restoreDay(week.tuesday),
+        wednesday: this.restoreDay(week.wednesday),
+        thursday: this.restoreDay(week.thursday),
+        friday: this.restoreDay(week.friday),
+        saturday: this.restoreDay(week.saturday),
+        sunday: this.restoreDay(week.sunday),
       });
       this.weeks.push(weekForm);
     });
@@ -102,33 +111,43 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
     return this.timeForm.get('weeks') as FormArray;
   }
 
-  addWeek(weekNo: number) {
+  addWeek(weekNo: number, year: number) {
+    const mondayDate = this.calendarCalcService.getDateByYearWeekDayIndex(year, weekNo, 1);
+
     const weekForm = this.fb.group({
+      year: [year],
       weekNo: [weekNo],
-      monday: this.createDay(),
-      tuesday: this.createDay(),
-      wednesday: this.createDay(),
-      thursday: this.createDay(),
-      friday: this.createDay(),
-      saturday: this.createDay(),
-      sunday: this.createDay(),
+      monday: this.createDay(new Date(mondayDate)),
+      tuesday: this.createDay(this.calendarCalcService.cloneAddDays(mondayDate, 1)),
+      wednesday: this.createDay(this.calendarCalcService.cloneAddDays(mondayDate, 2)),
+      thursday: this.createDay(this.calendarCalcService.cloneAddDays(mondayDate, 3)),
+      friday: this.createDay(this.calendarCalcService.cloneAddDays(mondayDate, 4)),
+      saturday: this.createDay(this.calendarCalcService.cloneAddDays(mondayDate, 5)),
+      sunday: this.createDay(this.calendarCalcService.cloneAddDays(mondayDate, 6)),
     });
     this.weeks.push(weekForm);
     this.weeksSignal.set([...this.weeks.controls]);
     this.weekNo.set(this.weekNo() + 1)
   }
 
-  createDay(day?: any): FormGroup {
+  restoreDay(day: any): FormGroup {
     return this.fb.group({
-      start: [day?.start ? day.start : null],
-      lunchOut: [day?.lunchOut ? day.lunchOut : null],
-      lunchIn: [day?.lunchIn ? day.lunchIn : null],
-      end: [day?.end ? day.end : null],
+      date: [new Date(day.date.split('T')[0])],
+      start: [day.start ? day.start : null],
+      lunchOut: [day.lunchOut ? day.lunchOut : null],
+      lunchIn: [day.lunchIn ? day.lunchIn : null],
+      end: [day.end ? day.end : null],
     });
   }
 
-  printWeeks() {
-    console.log(this.weeks);
+  createDay(date: Date): FormGroup {
+    return this.fb.group({
+      date: [date],
+      start: [null],
+      lunchOut: [null],
+      lunchIn: [null],
+      end: [null],
+    });
   }
 
   removeWeek(weekNo: number) {

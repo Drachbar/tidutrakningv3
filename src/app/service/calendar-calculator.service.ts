@@ -5,12 +5,42 @@ import { Injectable } from '@angular/core';
 })
 export class CalendarCalculatorService {
 
+  dayMap = new Map([
+    ['Måndag', 1],
+    ['Tisdag', 2],
+    ['Onsdag', 3],
+    ['Torsdag', 4],
+    ['Fredag', 5],
+    ['Lördag', 6],
+    ['Söndag', 7],
+  ])
+
+  getDateByYearWeekDayIndex(year: number, week: number, dayIndex: number) {
+    // ISO 8601: vecka 1 är veckan med årets första torsdag
+    const firstThursday = new Date(year, 0, 4);
+    const dayOfWeek = firstThursday.getDay(); // 0 = söndag, 1 = måndag, ..., 6 = lördag
+    const firstMonday = new Date(firstThursday);
+    firstMonday.setDate(firstThursday.getDate() - ((dayOfWeek + 6) % 7)); // backa till måndag
+
+    const targetDate = new Date(firstMonday);
+    targetDate.setDate(firstMonday.getDate() + (week - 1) * 7 + (dayIndex));
+
+    return targetDate;
+  }
+
+  getDayIndexByName(day: string): number {
+    return this.dayMap.get(day) ?? 0;
+  }
+
   getCurrentWeek(): number {
     const date = new Date();
     date.setHours(0, 0, 0, 0);
     date.setDate(date.getDate() + 4 - (date.getDay() || 7));
     const yearStart = new Date(date.getFullYear(), 0, 1);
     return Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  }
+  getCurrentYear(): number {
+    return new Date().getFullYear();
   }
 
   getDateForWeekday(weekNo: number, year: number, dayIndex: number): string {
@@ -22,13 +52,16 @@ export class CalendarCalculatorService {
     const firstMonday = new Date(firstThursday);
     firstMonday.setDate(firstThursday.getDate() - ((dayOfWeek + 6) % 7)); // Backa till måndagen
 
-    // Justera dayIndex så att 0 = måndag, 1 = tisdag, ..., 4 = fredag
-    const adjustedDayIndex = dayIndex + 1;
-
     // Beräkna första dagen i den önskade veckan
     const weekStart = new Date(firstMonday);
-    weekStart.setDate(firstMonday.getDate() + (weekNo - 1) * 7 + adjustedDayIndex);
+    weekStart.setDate(firstMonday.getDate() + (weekNo - 1) * 7 + dayIndex);
 
     return weekStart.toISOString().split('T')[0];
   }
+
+  cloneAddDays = (date: Date, days: number): Date => {
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
+  };
 }

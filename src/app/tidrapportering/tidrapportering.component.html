@@ -1,7 +1,13 @@
-<input type="number" [(ngModel)]="weekNo">
-<button (click)="addWeek(weekNo())">lägg till vecka med nummer {{ weekNo() }}</button>
-<button (click)="printWeeks()">Logga ut veckor</button>
-<button class="btn btn-primary" (click)="getCurrentWeek()">Hämta vecka</button>
+<label [for]="'week-input'">Vecka</label>
+<input [id]="'week-input'" type="number" [(ngModel)]="weekNo">
+<label [for]="'year-input'">År</label>
+<input [id]="'year-input'" type="number" [(ngModel)]="year">
+
+<div class="d-flex justify-content-center">
+  <p>{{ weekStartDate() }} - {{ weekEndDate() }}</p>
+</div>
+
+<button class="btn btn-primary" (click)="addWeek(weekNo(), year())">lägg till vecka {{ weekNo() }}, {{year()}}</button>
 @for (week of latestWeeks(); track week.get('weekNo')?.value) {
   <app-week [week]="week" (removeWeek)="removeWeek($event)"></app-week>
 }

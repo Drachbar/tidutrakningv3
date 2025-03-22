@@ -1,7 +1,10 @@
 @let formattedWeekNo = (weekNo() ?? 0).toString();
 
 <div [formGroup]="week">
-  <legend>Vecka {{ formattedWeekNo }}</legend>
+  <legend class="d-flex justify-content-between w-100">
+    <span class="text-start">{{year()}}</span>
+    <span class="mx-auto">Vecka {{ formattedWeekNo }}</span>
+  </legend>
   <button class="btn btn-primary mb-3" (click)="removeWeek.emit(parseInt(formattedWeekNo))">Ta bort vecka</button>
   <button class="btn btn-primary mb-3" (click)="toggleWeekends()">
     {{ showWeekends() ? 'Dölj helger' : 'Visa helger' }}
@@ -11,7 +14,6 @@
       @for (day of days; track i; let i = $index) {
         @if (day.name !== 'Lördag' && day.name !== 'Söndag') {
           <div>
-            <h3>{{ getFormattedDate(i) }}</h3>
             <app-day [formGroup]="day.group"
                      [weekNo]="formattedWeekNo"
                      [dayName]="day.name"></app-day>
@@ -24,7 +26,6 @@
       @for (day of days; track i; let i = $index) {
         @if (day.name === 'Lördag' || day.name === 'Söndag') {
           <div>
-            <h3>{{ getFormattedDate(i) }}</h3>
             <app-day [formGroup]="day.group"
                      [weekNo]="formattedWeekNo"
                      [dayName]="day.name"></app-day>

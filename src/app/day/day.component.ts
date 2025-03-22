@@ -1,14 +1,15 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, model, ModelSignal, OnInit} from '@angular/core';
 import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {map, Observable, startWith} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
+import {HolidayServiceService} from '../service/holiday-service.service';
 
 @Component({
   selector: 'app-day',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    AsyncPipe
+    AsyncPipe,
   ],
   templateUrl: './day.component.html',
   styleUrl: './day.component.scss'
@@ -18,10 +19,16 @@ export class DayComponent implements OnInit {
   @Input() weekNo!: string;
   @Input() dayName!: string;
 
+  holidayService = inject(HolidayServiceService);
+
+  holiday : ModelSignal<string | undefined> = model<string | undefined>();
+
   workingHours$!: Observable<string>;
 
   ngOnInit() {
     this.workingHours$ = this.createWorkingHoursObservable();
+    this.holiday.set(this.holidayService.getHoliday(this.formGroup.get('date')?.value));
+    // console.log(this.holidayService.getAllHolidays(this.formGroup.get('date')?.value?.getFullYear()));
   }
 
   inputId(type: string): string {
@@ -64,5 +71,13 @@ export class DayComponent implements OnInit {
     const date = new Date();
     date.setHours(hours, minutes, 0, 0);
     return date;
+  }
+
+  getFormattedDate(): string {
+    return this.formGroup.get('date')?.value?.toISOString().split('T')[0];
+  }
+
+  isWeekend(): boolean {
+    return this.dayName === "Lördag" || this.dayName === "Söndag";
   }
 }

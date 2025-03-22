@@ -1,5 +1,8 @@
-<div [formGroup]="formGroup" class="day">
+<div [class.weekend]="isWeekend()" [class.holiday]="holiday()" [title]="holiday() ? holiday() : ''">
+  <h3>{{ getFormattedDate() }}</h3>
   <h3>{{ dayName }}</h3>
+</div>
+<div [formGroup]="formGroup" class="day">
   <label [for]="inputId('start')">Start:</label>
   <input type="time" formControlName="start" [id]="inputId('start')">
 
