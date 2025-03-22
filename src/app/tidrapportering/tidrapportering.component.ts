@@ -24,14 +24,22 @@ import {CalendarCalculatorService} from '../service/calendar-calculator.service'
   styleUrl: './tidrapportering.component.scss'
 })
 export class TidrapporteringComponent implements OnInit, AfterViewInit {
-  @ViewChild('loadMoreTrigger', { static: false }) loadMoreTrigger!: ElementRef;
+  @ViewChild('loadMoreTrigger', {static: false}) loadMoreTrigger!: ElementRef;
   fb = inject(FormBuilder);
   calendarCalcService = inject(CalendarCalculatorService);
   destroyRef = inject(DestroyRef);
   weekNo = model<number>(this.calendarCalcService.getCurrentWeek());
+  year = model<number>(this.calendarCalcService.getCurrentYear());
   timeForm: FormGroup = this.fb.group({
     weeks: this.fb.array([]),
   });
+
+  weekStartDate = computed(() =>
+    this.calendarCalcService.getDateByYearWeekDayIndex(this.year(), this.weekNo(), 1).toISOString().split('T')[0]
+  )
+  weekEndDate = computed(() =>
+    this.calendarCalcService.getDateByYearWeekDayIndex(this.year(), this.weekNo(), 7).toISOString().split('T')[0]
+  )
 
   displayedWeeks = signal(3);
 
@@ -65,7 +73,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
       if (entries[0].isIntersecting) {
         this.loadMoreWeeks();
       }
-    }, { rootMargin: '400px' });
+    }, {rootMargin: '400px'});
 
     observer.observe(this.loadMoreTrigger.nativeElement);
   }
@@ -81,6 +89,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
 
     storedWeeks.forEach(week => {
       const weekForm = this.fb.group({
+        year: [week.year],
         weekNo: [week.weekNo],
         monday: this.createDay(week.monday),
         tuesday: this.createDay(week.tuesday),
@@ -102,8 +111,9 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
     return this.timeForm.get('weeks') as FormArray;
   }
 
-  addWeek(weekNo: number) {
+  addWeek(weekNo: number, year: number) {
     const weekForm = this.fb.group({
+      year: [year],
       weekNo: [weekNo],
       monday: this.createDay(),
       tuesday: this.createDay(),

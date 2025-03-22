@@ -1,7 +1,8 @@
-import {Component, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {map, Observable, startWith} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
+import {CalendarCalculatorService} from '../service/calendar-calculator.service';
 
 @Component({
   selector: 'app-day',
@@ -17,6 +18,9 @@ export class DayComponent implements OnInit {
   @Input() formGroup!: FormGroup;
   @Input() weekNo!: string;
   @Input() dayName!: string;
+
+
+  calendarCalculator = inject(CalendarCalculatorService);
 
   workingHours$!: Observable<string>;
 
@@ -64,5 +68,13 @@ export class DayComponent implements OnInit {
     const date = new Date();
     date.setHours(hours, minutes, 0, 0);
     return date;
+  }
+
+  getFormattedDate(): string {
+    const dayIndex = this.calendarCalculator.getDayIndexByName(this.dayName);
+    if (dayIndex === 0) {
+      return '';
+    }
+    return this.calendarCalculator.getDateForWeekday(parseInt(this.weekNo), 2025, dayIndex);
   }
 }

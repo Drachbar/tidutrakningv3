@@ -1,7 +1,6 @@
-import {Component, computed, EventEmitter, inject, Input, OnInit, Output, signal} from '@angular/core';
+import {Component, computed, EventEmitter, Input, OnInit, Output, signal} from '@angular/core';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {DayComponent} from '../day/day.component';
-import {CalendarCalculatorService} from '../service/calendar-calculator.service';
 
 @Component({
   selector: 'app-week',
@@ -16,10 +15,9 @@ export class WeekComponent implements OnInit {
   @Input({required: true}) week!: FormGroup;
   @Output() removeWeek = new EventEmitter<number>();
 
-  calendarCalculator = inject(CalendarCalculatorService);
-
   showWeekends = signal(false); // Skapa en signal istället för en vanlig variabel
   weekNo = computed(() => this.week.get('weekNo')?.value || null);
+  year = computed(() => this.week.get('year')?.value || null);
 
   ngOnInit() {
     if (!this.isEmptyDay(this.week.value.saturday) || !this.isEmptyDay(this.week.value.sunday)) {
@@ -45,10 +43,6 @@ export class WeekComponent implements OnInit {
 
   isEmptyDay(day: any) {
     return Object.values(day).every(value => value === null)
-  }
-
-  getFormattedDate(dayIndex: number): string {
-    return this.calendarCalculator.getDateForWeekday(this.weekNo(), 2027, dayIndex);
   }
 
   protected readonly parseInt = parseInt;
