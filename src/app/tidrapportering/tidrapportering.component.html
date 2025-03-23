@@ -7,9 +7,12 @@
   <p>{{ weekStartDate() }} - {{ weekEndDate() }}</p>
 </div>
 
-<button class="btn btn-primary" (click)="addWeek(weekNo(), year())">lägg till vecka {{ weekNo() }}, {{year()}}</button>
-@for (week of latestWeeks(); track week.get('weekNo')?.value) {
-  <app-week [week]="week" (removeWeek)="removeWeek($event)"></app-week>
-}
+<button class="btn btn-primary" (click)="addWeek(weekNo(), year())">lägg till vecka {{ weekNo() }}, {{ year() }}
+</button>
+<section>
+  @for (week of latestWeeks(); track week.get('weekNo')?.value) {
+    <app-week [week]="week" (removeWeek)="removeWeek($event)"></app-week>
+  }
+</section>
 
 <div #loadMoreTrigger></div>

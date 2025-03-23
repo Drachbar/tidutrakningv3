@@ -1,3 +1,17 @@
+:host {
+  flex-basis: 400px;
+  flex-grow: 1;
+}
+
+legend {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.year {
+  font-size: smaller;
+}
+
 .week {
   display: grid;
   grid-template-columns: auto auto;

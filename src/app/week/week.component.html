@@ -1,15 +1,17 @@
 @let formattedWeekNo = (weekNo() ?? 0).toString();
 
-<div [formGroup]="week">
-  <legend class="d-flex justify-content-between w-100">
-    <span class="text-start">{{year()}}</span>
-    <span class="mx-auto">Vecka {{ formattedWeekNo }}</span>
+<fieldset [formGroup]="week" class="border border-3 rounded p-3 m-3">
+  <legend class="w-100">
+    <span class="year">{{ year() }}</span>
+    <span class="text-center my-3">Vecka {{ formattedWeekNo }}</span>
   </legend>
-  <button class="btn btn-primary mb-3" (click)="removeWeek.emit(parseInt(formattedWeekNo))">Ta bort vecka</button>
-  <button class="btn btn-primary mb-3" (click)="toggleWeekends()">
-    {{ showWeekends() ? 'Dölj helger' : 'Visa helger' }}
-  </button>
-  <div class="week">
+  <div class="d-flex justify-content-between">
+    <button class="btn btn-primary" (click)="removeWeek.emit(parseInt(formattedWeekNo))">Ta bort vecka</button>
+    <button class="btn btn-primary" (click)="toggleWeekends()">
+      {{ showWeekends() ? 'Dölj helger' : 'Visa helger' }}
+    </button>
+  </div>
+  <div class="mt-3" [class.week]="showWeekends()">
     <div class="weekdays">
       @for (day of days; track i; let i = $index) {
         @if (day.name !== 'Lördag' && day.name !== 'Söndag') {
@@ -34,4 +36,4 @@
       }
     </div>
   </div>
-</div>
+</fieldset>

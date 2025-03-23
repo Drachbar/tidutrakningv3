@@ -74,7 +74,8 @@ export class DayComponent implements OnInit {
   }
 
   getFormattedDate(): string {
-    return this.formGroup.get('date')?.value?.toISOString().split('T')[0];
+    const date: Date = this.formGroup.get('date')?.value;
+    return date.getDate() + '/' + (date.getMonth() + 1);
   }
 
   isWeekend(): boolean {
