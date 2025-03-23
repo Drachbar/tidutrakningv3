@@ -1,4 +1,4 @@
-<div [class.weekend]="isWeekend()" [class.holiday]="holiday()" [title]="holiday() ? holiday() : ''">
+<div [class.weekend]="isWeekend()" [class.holiday]="holiday()" [class.day-off]="dayOff()" [title]="holiday() ? holiday() : ''">
   <h3>{{ getFormattedDate() }}</h3>
   <h3>{{ dayName }}</h3>
 </div>

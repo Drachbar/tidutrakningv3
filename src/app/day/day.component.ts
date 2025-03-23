@@ -1,4 +1,4 @@
-import {Component, inject, Input, model, ModelSignal, OnInit} from '@angular/core';
+import {Component, computed, inject, Input, model, ModelSignal, OnInit} from '@angular/core';
 import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {map, Observable, startWith} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
@@ -22,13 +22,13 @@ export class DayComponent implements OnInit {
   holidayService = inject(HolidayServiceService);
 
   holiday : ModelSignal<string | undefined> = model<string | undefined>();
+  dayOff= computed(() => this.holidayService.daysOff.get(this.holiday() ?? '') || false)
 
   workingHours$!: Observable<string>;
 
   ngOnInit() {
     this.workingHours$ = this.createWorkingHoursObservable();
     this.holiday.set(this.holidayService.getHoliday(this.formGroup.get('date')?.value));
-    // console.log(this.holidayService.getAllHolidays(this.formGroup.get('date')?.value?.getFullYear()));
   }
 
   inputId(type: string): string {

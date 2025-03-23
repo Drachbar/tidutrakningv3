@@ -18,6 +18,28 @@ export class HolidayServiceService {
     ['12-31', 'Nyårsafton'],
   ]);
 
+  daysOff = new Map([
+    ['Nyårsdagen', true],
+    ['Trettondedag jul', true],
+    ['Skärtorsdag', false],
+    ['Långfredagen', true],
+    ['Påskafton', true],
+    ['Påskdagen', true],
+    ['Annandag påsk', true],
+    ['Första maj', true],
+    ['Kristi Himmelsfärdsdag', true],
+    ['Pingstdagen', false],
+    ['Annandag pingst', false],
+    ['Sveriges nationaldag', true],
+    ['Midsommarafton', true],
+    ['Midsommardagen', true],
+    ['Alla helgons dag', true],
+    ['Julafton', true],
+    ['Juldagen', true],
+    ['Annandag jul', true],
+    ['Nyårsafton', true],
+  ])
+
   public getHoliday(date: Date): string | undefined {
     const year = date.getFullYear();
 
