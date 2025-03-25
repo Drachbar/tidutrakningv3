@@ -1,5 +1,28 @@
-section {
+main {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+#add-week {
+  display: flex;
+  align-items: center;
+  width: fit-content;
+  margin: 2rem auto;
+  gap: 2rem;
+}
+
+#add-week-inputs {
+  display: flex;
+  flex-direction: column;
+}
+
+#add-week-inputs div label {
+  text-align: end;
+  width: 60px;
+}
+
+#add-week-inputs input {
+  margin-left: 1rem;
+  width: 60px;
 }
