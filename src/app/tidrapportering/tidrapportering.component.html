@@ -9,7 +9,7 @@
 
 <button class="btn btn-primary" (click)="addWeek(weekNo(), year())">lägg till vecka {{ weekNo() }}, {{ year() }}
 </button>
-<section>
+<section class="mt-5">
   @for (week of latestWeeks(); track week.get('weekNo')?.value) {
     <app-week [week]="week" (removeWeek)="removeWeek($event)"></app-week>
   }

@@ -1,9 +1,9 @@
 import {Component} from '@angular/core';
-import {RouterLink, RouterOutlet} from '@angular/router';
+import {TidrapporteringComponent} from './tidrapportering/tidrapportering.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink],
+  imports: [TidrapporteringComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
