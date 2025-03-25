@@ -1,15 +1,24 @@
-<label [for]="'week-input'">Vecka</label>
-<input [id]="'week-input'" type="number" [(ngModel)]="weekNo">
-<label [for]="'year-input'">År</label>
-<input [id]="'year-input'" type="number" [(ngModel)]="year">
+<section id="add-week">
+  <button class="btn btn-primary" (click)="addWeek(weekNo(), year())">lägg till vecka {{ weekNo() }}, {{ year() }}
+  </button>
+  <section id="add-week-inputs">
+    <div>
+      <label [for]="'year-input'">År</label>
+      <input [id]="'year-input'" type="number" [(ngModel)]="year">
+    </div>
+    <div>
+      <label [for]="'week-input'">Vecka</label>
+      <input [id]="'week-input'" type="number" [(ngModel)]="weekNo">
+    </div>
+  </section>
 
-<div class="d-flex justify-content-center">
-  <p>{{ weekStartDate() }} - {{ weekEndDate() }}</p>
-</div>
+  <span>{{ weekStartDate() }} - {{ weekEndDate() }}</span>
 
-<button class="btn btn-primary" (click)="addWeek(weekNo(), year())">lägg till vecka {{ weekNo() }}, {{year()}}</button>
-@for (week of latestWeeks(); track week.get('weekNo')?.value) {
-  <app-week [week]="week" (removeWeek)="removeWeek($event)"></app-week>
-}
+</section>
+<main class="mt-5 ">
+  @for (week of latestWeeks(); track week.get('weekNo')?.value) {
+    <app-week [week]="week" (removeWeek)="removeWeek($event)"></app-week>
+  }
+</main>
 
 <div #loadMoreTrigger></div>

@@ -41,7 +41,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
     this.calendarCalcService.getDateByYearWeekDayIndex(this.year(), this.weekNo(), 7).toISOString().split('T')[0]
   )
 
-  displayedWeeks = signal(3);
+  displayedWeeks = signal(4);
 
   latestWeeks = computed(() =>
     this.weeksSignal().slice(-this.displayedWeeks()).reverse()
@@ -80,7 +80,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
 
   loadMoreWeeks() {
     if (this.displayedWeeks() < this.weeks.controls.length) {
-      this.displayedWeeks.update(val => val + 5); // Ladda 5 fler veckor
+      this.displayedWeeks.update(val => val + 4); // Ladda 5 fler veckor
     }
   }
 
@@ -112,8 +112,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
   }
 
   addWeek(weekNo: number, year: number) {
-    const mondayDate = this.calendarCalcService.getDateByYearWeekDayIndex(year, weekNo, 1);
-
+    const mondayDate = this.calendarCalcService.getDateByYearWeekDayIndex(year, weekNo, 0);
     const weekForm = this.fb.group({
       year: [year],
       weekNo: [weekNo],
@@ -132,7 +131,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
 
   restoreDay(day: any): FormGroup {
     return this.fb.group({
-      date: [new Date(day.date.split('T')[0])],
+      date: [new Date(day.date)],
       start: [day.start ? day.start : null],
       lunchOut: [day.lunchOut ? day.lunchOut : null],
       lunchIn: [day.lunchIn ? day.lunchIn : null],

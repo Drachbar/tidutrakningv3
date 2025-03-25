@@ -24,15 +24,25 @@ export class DayComponent implements OnInit {
   holiday : ModelSignal<string | undefined> = model<string | undefined>();
   dayOff= computed(() => this.holidayService.daysOff.get(this.holiday() ?? '') || false)
 
-  workingHours$!: Observable<string>;
+  workingTime$!: Observable<string>;
+  workingSum$!: Observable<string>;
 
   ngOnInit() {
-    this.workingHours$ = this.createWorkingHoursObservable();
+    this.workingTime$ = this.createWorkingHoursObservable();
+    this.workingSum$ = this.createWorkingSumObservable(this.workingTime$);
     this.holiday.set(this.holidayService.getHoliday(this.formGroup.get('date')?.value));
   }
 
   inputId(type: string): string {
     return `${this.weekNo}-${this.dayName}-${type}`;
+  }
+
+  createWorkingSumObservable(workingTime$: Observable<string>): Observable<string> {
+    return workingTime$.pipe(map(time => {
+      const [ hours, minutes ] = time.split(':');
+      const minutesPart = Math.round(((parseInt(minutes) / 60) + Number.EPSILON) * 100);
+      return hours + '.' + minutesPart;
+    }));
   }
 
   createWorkingHoursObservable(): Observable<string> {
@@ -74,7 +84,8 @@ export class DayComponent implements OnInit {
   }
 
   getFormattedDate(): string {
-    return this.formGroup.get('date')?.value?.toISOString().split('T')[0];
+    const date: Date = this.formGroup.get('date')?.value;
+    return date.getDate() + '/' + (date.getMonth() + 1);
   }
 
   isWeekend(): boolean {
