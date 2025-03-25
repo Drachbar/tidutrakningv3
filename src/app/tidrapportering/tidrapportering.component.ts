@@ -41,7 +41,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
     this.calendarCalcService.getDateByYearWeekDayIndex(this.year(), this.weekNo(), 7).toISOString().split('T')[0]
   )
 
-  displayedWeeks = signal(3);
+  displayedWeeks = signal(4);
 
   latestWeeks = computed(() =>
     this.weeksSignal().slice(-this.displayedWeeks()).reverse()
@@ -80,7 +80,7 @@ export class TidrapporteringComponent implements OnInit, AfterViewInit {
 
   loadMoreWeeks() {
     if (this.displayedWeeks() < this.weeks.controls.length) {
-      this.displayedWeeks.update(val => val + 5); // Ladda 5 fler veckor
+      this.displayedWeeks.update(val => val + 4); // Ladda 5 fler veckor
     }
   }
 
