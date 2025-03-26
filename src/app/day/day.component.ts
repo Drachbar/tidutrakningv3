@@ -3,13 +3,16 @@ import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {map, Observable, startWith} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {HolidayServiceService} from '../service/holiday-service.service';
+import { IonItem, IonList, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonIcon, IonText, IonInput, IonDatetime } from '@ionic/angular/standalone';
+
 
 @Component({
   selector: 'app-day',
   imports: [
     FormsModule,
     ReactiveFormsModule,
-    AsyncPipe,
+    AsyncPipe, IonItem, IonList, IonLabel, IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonText, IonIcon, IonInput, IonDatetime
+
   ],
   templateUrl: './day.component.html',
   styleUrl: './day.component.scss'

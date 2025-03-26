@@ -1,39 +1,62 @@
-@let formattedWeekNo = (weekNo() ?? 0).toString();
 
-<fieldset [formGroup]="week" class="border border-3 rounded p-3">
-  <legend class="w-100">
-    <span class="year">{{ year() }}</span>
-    <span class="text-center my-3">Vecka {{ formattedWeekNo }}</span>
-  </legend>
-  <div class="d-flex justify-content-between">
-    <button class="btn btn-primary" (click)="removeWeek.emit(parseInt(formattedWeekNo))">Ta bort vecka</button>
-    <button class="btn btn-primary" (click)="toggleWeekends()">
-      {{ showWeekends() ? 'Dölj helger' : 'Visa helger' }}
-    </button>
-  </div>
-  <div class="mt-3" [class.week]="showWeekends()">
-    <div class="weekdays">
-      @for (day of days; track i; let i = $index) {
-        @if (day.name !== 'Lördag' && day.name !== 'Söndag') {
-          <div>
-            <app-day [formGroup]="day.group"
-                     [weekNo]="formattedWeekNo"
-                     [dayName]="day.name"></app-day>
-          </div>
-        }
-      }
-    </div>
-    <!-- Helg (lördag-söndag) -->
-    <div class="weekend" [class.d-none]="!showWeekends()">
-      @for (day of days; track i; let i = $index) {
-        @if (day.name === 'Lördag' || day.name === 'Söndag') {
-          <div>
-            <app-day [formGroup]="day.group"
-                     [weekNo]="formattedWeekNo"
-                     [dayName]="day.name"></app-day>
-          </div>
-        }
-      }
-    </div>
-  </div>
-</fieldset>
+
+  <ion-card [formGroup]="week" class="ion-padding">
+
+    <!-- Header för veckan -->
+    <ion-card-header>
+      <ion-card-title class="ion-text-center">
+        <span class="year">{{ year() }}</span><br />
+        Vecka {{ weekNo() ?? 0 }}
+      </ion-card-title>
+    </ion-card-header>
+
+    <!-- Knappar -->
+    <ion-card-content>
+      <ion-grid>
+        <ion-row class="ion-justify-content-between ion-align-items-center">
+          <ion-col size="auto">
+            <ion-button color="danger" (click)="removeWeek.emit(weekNo())">
+              Ta bort vecka
+            </ion-button>
+          </ion-col>
+          <ion-col size="auto">
+            <ion-button (click)="toggleWeekends()">
+              {{ showWeekends() ? 'Dölj helger' : 'Visa helger' }}
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- Vardagar -->
+      <ion-grid>
+        <ion-row class="ion-align-items-start">
+          @for (day of days; track i; let i = $index) {
+            @if (day.name !== 'Lördag' && day.name !== 'Söndag') {
+              <ion-col>
+                <app-day [formGroup]="day.group"
+                        [weekNo]="(weekNo() ?? 0).toString()"
+                        [dayName]="day.name">
+                </app-day>
+              </ion-col>
+            }
+          }
+        </ion-row>
+      </ion-grid>
+
+      <!-- Helger -->
+      <ion-grid [class.d-none]="!showWeekends()">
+        <ion-row>
+          @for (day of days; track i; let i = $index) {
+            @if (day.name === 'Lördag' || day.name === 'Söndag') {
+              <ion-col>
+                <app-day [formGroup]="day.group"
+                        [weekNo]="(weekNo() ?? 0).toString()"
+                        [dayName]="day.name">
+                </app-day>
+              </ion-col>
+            }
+          }
+        </ion-row>
+      </ion-grid>
+    </ion-card-content>
+  </ion-card>

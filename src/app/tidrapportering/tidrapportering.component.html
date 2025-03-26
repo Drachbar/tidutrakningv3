@@ -1,24 +1,57 @@
-<section id="add-week">
-  <button class="btn btn-primary" (click)="addWeek(weekNo(), year())">lägg till vecka {{ weekNo() }}, {{ year() }}
-  </button>
-  <section id="add-week-inputs">
-    <div>
-      <label [for]="'year-input'">År</label>
-      <input [id]="'year-input'" type="number" [(ngModel)]="year">
-    </div>
-    <div>
-      <label [for]="'week-input'">Vecka</label>
-      <input [id]="'week-input'" type="number" [(ngModel)]="weekNo">
-    </div>
-  </section>
 
-  <span>{{ weekStartDate() }} - {{ weekEndDate() }}</span>
 
-</section>
-<main class="mt-5 ">
-  @for (week of latestWeeks(); track week.get('weekNo')?.value) {
-    <app-week [week]="week" (removeWeek)="removeWeek($event)"></app-week>
-  }
-</main>
+  <!-- Sektion: Lägg till vecka -->
+  <ion-card id="add-week">
+    <ion-card-content class="center">
+      <ion-button color="primary" (click)="addWeek(weekNo(), year())">
+        <ion-icon name="add"></ion-icon> Lägg till vecka {{ weekNo() }}, {{ year() }}
+      </ion-button>
 
-<div #loadMoreTrigger></div>
+      <!-- Inputs för år och vecka -->
+      <ion-grid id="add-week-inputs" class="ion-padding-top">
+        <ion-row class="ion-text-center">
+          <ion-col size="3">
+            <ion-item>
+              <ion-label position="stacked">År</ion-label>
+              <ion-input
+                type="number"
+                [(ngModel)]="year"
+                inputmode="numeric">
+              </ion-input>
+            </ion-item>
+          </ion-col>
+
+          <ion-col size="3">
+            <ion-item>
+              <ion-label position="stacked">Vecka</ion-label>
+              <ion-input
+                type="number"
+                [(ngModel)]="weekNo"
+                inputmode="numeric">
+              </ion-input>
+            </ion-item>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+      <!-- Datumintervall -->
+      <ion-text color="medium" class="ion-text-center">
+        {{ weekStartDate() }} – {{ weekEndDate() }}
+      </ion-text>
+    </ion-card-content>
+  </ion-card>
+
+  <!-- Lista av veckor -->
+  <ion-list class="ion-margin-top">
+    @for (week of latestWeeks(); track week.get('weekNo')?.value) {
+      <app-week
+        [week]="week"
+        (removeWeek)="removeWeek($event)">
+      </app-week>
+    }
+  </ion-list>
+
+  <!-- Scroll-trigger -->
+  <div #loadMoreTrigger></div>
+
+

@@ -1,23 +1,76 @@
-<div [class.weekend]="isWeekend()" [class.holiday]="holiday()" [class.day-off]="dayOff()" [title]="holiday() ? holiday() : ''">
-  <h3>{{ getFormattedDate() }}</h3>
-  <h3>{{ dayName }}</h3>
-</div>
-<div [formGroup]="formGroup" class="day">
-  <label [for]="inputId('start')">Start:</label>
-  <input type="time" formControlName="start" [id]="inputId('start')">
 
-  <label [for]="inputId('lunchOut')">Lunch ut:</label>
-  <input type="time" formControlName="lunchOut" [id]="inputId('lunchOut')">
+ <!-- Datum och dag -->
+  <ion-card
+    [class.weekend]="isWeekend()"
+    [class.holiday]="holiday()"
+    [class.day-off]="dayOff()"
+    [title]="holiday() || ''"
+    class="ion-text-center">
+    <ion-card-header >
+      <ion-card-title>{{ getFormattedDate() }}</ion-card-title>
+      <ion-card-subtitle>{{ dayName }}</ion-card-subtitle>
+    </ion-card-header>
+  </ion-card>
 
-  <label [for]="inputId('lunchIn')">Lunch in:</label>
-  <input type="time" formControlName="lunchIn" [id]="inputId('lunchIn')">
+    <!-- Tidsinmatning -->
+  <form [formGroup]="formGroup">
+    <ion-list class="day">
 
-  <label [for]="inputId('end')">Slut:</label>
-  <input type="time" formControlName="end" [id]="inputId('end')">
-</div>
+      <ion-item lines="full">
+        <ion-label position="stacked">
+          <ion-icon name="time-outline" slot="start"></ion-icon> Start
+        </ion-label>
+        <ion-input
+          type="time"
+          inputmode="numeric"
+          formControlName="start"
+          [id]="inputId('start')">
+        </ion-input>
+      </ion-item>
 
-<div class="working-hours">
-  <strong>Arbetad tid: </strong> {{ workingTime$ | async }}
-  <br>
-  <strong>Summa: </strong>{{workingSum$ | async}}
-</div>
+      <ion-item lines="full">
+        <ion-label position="stacked">
+          <ion-icon name="fast-food-outline" slot="start"></ion-icon> Lunch ut
+        </ion-label>
+        <ion-input
+          type="time"
+          inputmode="numeric"
+          formControlName="lunchOut"
+          [id]="inputId('lunchOut')">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">
+          <ion-icon name="cafe-outline" slot="start"></ion-icon> Lunch in
+        </ion-label>
+        <ion-input
+          type="time"
+          inputmode="numeric"
+          formControlName="lunchIn"
+          [id]="inputId('lunchIn')">
+        </ion-input>
+      </ion-item>
+
+      <ion-item lines="full">
+        <ion-label position="stacked">
+          <ion-icon name="log-out-outline" slot="start"></ion-icon> Slut
+        </ion-label>
+        <ion-input
+          type="time"
+          inputmode="numeric"
+          formControlName="end"
+          [id]="inputId('end')">
+        </ion-input>
+      </ion-item>
+
+    </ion-list>
+  </form>
+
+<!-- Arbetad tid -->
+  <ion-card class="working-hours ion-padding">
+   <ion-text>
+      <strong>Arbetad tid:</strong> {{ workingTime$ | async }}<br />
+      <strong>Summa:</strong> {{ workingSum$ | async }}
+    </ion-text>
+  </ion-card>

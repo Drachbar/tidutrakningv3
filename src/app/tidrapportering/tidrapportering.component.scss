@@ -1,28 +1,51 @@
-main {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
+
+
 
 #add-week {
-  display: flex;
-  align-items: center;
-  width: fit-content;
-  margin: 2rem auto;
-  gap: 2rem;
+  ion-button {
+    margin-bottom: 1rem;
+  }
+
+  ion-grid {
+    padding: 0;
+  }
+
+  ion-item {
+    --background: transparent;
+    --padding-start: 0;
+    --padding-end: 0;
+  }
+
+  ion-input {
+    font-size: 16px;
+  }
+
+  ion-text {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 14px;
+    color: var(--ion-color-medium);
+  }
 }
 
-#add-week-inputs {
-  display: flex;
-  flex-direction: column;
+ion-list {
+  margin-top: 2rem;
+  padding: 0;
 }
 
-#add-week-inputs div label {
-  text-align: end;
-  width: 60px;
+app-week {
+  display: block;
+  margin-bottom: 1.5rem;
 }
 
-#add-week-inputs input {
-  margin-left: 1rem;
-  width: 60px;
+ion-card {
+  box-shadow: var(--ion-box-shadow);
+  border-radius: 12px;
+}
+
+@media (min-width: 768px) {
+  ion-grid {
+    max-width: 500px;
+    margin: 0 auto;
+  }
 }

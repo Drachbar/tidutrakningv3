@@ -13,12 +13,14 @@ import {FormArray, FormBuilder, FormGroup, FormsModule} from '@angular/forms';
 import {WeekComponent} from '../week/week.component';
 import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 import {CalendarCalculatorService} from '../service/calendar-calculator.service';
+import {IonButton, IonCard, IonCardContent, IonCol, IonGrid, IonIcon, IonInput, IonItem, IonLabel, IonList, IonRow, IonText } from '@ionic/angular/standalone';
+
 
 @Component({
   selector: 'app-tidrapportering',
   imports: [
     FormsModule,
-    WeekComponent,
+    WeekComponent, IonButton, IonList, IonCard, IonCardContent, IonText, IonGrid, IonRow, IonCol, IonItem, IonInput, IonLabel, IonIcon
   ],
   templateUrl: './tidrapportering.component.html',
   styleUrl: './tidrapportering.component.scss'

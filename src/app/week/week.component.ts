@@ -1,15 +1,17 @@
 import {Component, computed, EventEmitter, Input, OnInit, Output, signal} from '@angular/core';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {DayComponent} from '../day/day.component';
+import { IonCard, IonCardHeader, IonCardTitle, IonContent, IonButton, IonGrid, IonRow, IonCol, IonCardContent } from '@ionic/angular/standalone';
+
 
 @Component({
   selector: 'app-week',
   imports: [
     ReactiveFormsModule,
-    DayComponent
+    DayComponent, IonCard, IonCardHeader, IonCardTitle, IonButton, IonGrid, IonRow, IonCol, IonCardContent
   ],
   templateUrl: './week.component.html',
-  styleUrl: './week.component.scss'
+  styleUrl: './week.component.scss',
 })
 export class WeekComponent implements OnInit {
   @Input({required: true}) week!: FormGroup;
